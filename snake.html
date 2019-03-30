@@ -1,0 +1,258 @@
+<html><head><meta charset="utf-8"></head>
+<style>
+.bdiv {
+	display:inline-block;
+}
+
+
+.button {
+  background-color: #aaaaaa;
+  border: none;
+	  height:64px;
+    width:128px;
+		margin: 0 auto;
+			margin-bottom: 4px;
+			display: block;
+}
+</style>
+<body style="margin: 0px; overflow: hidden;">
+	<canvas style="border: 0px;" id="canvas" width="512" height="512"></canvas>
+	<div>
+	<div class="bdiv">
+	<button class="button" id="left">L</button>
+	</div>
+	<div class="bdiv">
+	<button class="button" id="up">U</button>
+	<button class="button" id="down">D</button>
+	</div>
+	<div class="bdiv">
+	<button class="button" id="right">R</button>
+	</div>
+	</div>
+	<script type="text/javascript">
+		"use strict";
+
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		console.assert(canvas.width === canvas.height);
+		
+		function Commander() {
+			this.commands = [];
+			this.add = function(x, y) {
+				if (this.commands.length === 0 && grid.snake.dirx === x && grid.snake.diry === y) return;
+				if (this.commands.length > 0 && x === this.commands[this.commands.length - 1].x && y === this.commands[this.commands.length - 1].y) return;
+				this.commands.push(new Command(x, y));
+			}
+		}
+		var commander = new Commander();
+		
+		function Command(x, y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+		function Snake() {
+			this.len = 0;
+			this.reverse = function () {
+				var start = 0;
+				var end = this.len - 1;
+				while (start < end) {
+					var temp = this.cells[start];
+					this.cells[start] = this.cells[end];
+					this.cells[end] = temp;
+					start++;
+					end--;
+				}
+			}
+			this.cells = [];
+			
+			this.shift = function() {
+				for (var i = 0; i < this.len - 1; i++) this.cells[i] = this.cells[i + 1];
+			}
+			
+			this.toGrow = Math.floor(Math.random() * 8);
+			this.dirx = 0;
+			this.diry = 0;
+			
+			this.changeDir = function() {
+				var x = 0;
+				var y = 0;
+				if (commander.commands.length) {
+					var command = commander.commands.splice(0, 1);
+					x = command[0].x;
+					y = command[0].y;
+				} else return;
+				
+				if (this.len === 1) {
+					this.dirx = x;
+					this.diry = y;
+				} else if ((this.dirx && this.dirx === -x) || (this.diry && this.diry === -y)) {
+					this.reverse();
+					var dx = this.cells[this.len - 1].x - this.cells[this.len - 2].x;
+					if (Math.abs(dx) > 1) dx = -Math.sign(dx);
+					this.dirx = dx;
+					var dy = this.cells[this.len - 1].y - this.cells[this.len - 2].y;
+					if (Math.abs(dy) > 1) dy = -Math.sign(dy);
+					this.diry = dy;
+				} else {
+					this.dirx = x;
+					this.diry = y;
+				}
+			}
+		}
+
+		function Cell(x, y, value) {
+			this.x = x;
+			this.y = y;
+			this.value = value;
+		}
+		
+		function Grid(size) {
+			this.side = size;
+			this.cellSize = canvas.width / size;
+			this.cellCount = Math.pow(size, 2);
+			this.cells;
+			this.snake;
+			this.drawList = [];
+			
+			this.init = function() {
+				commander.commands = [];
+				this.cells = [];
+				for (var y = 0; y < this.side; y++)
+					for (var x = 0; x < this.side; x++)
+						this.cells.push(new Cell(x, y, 0));
+				this.spawnSnake();
+				this.spawnWalls();
+				this.spawnFood();
+			}
+			
+			this.spawnWalls = function() {
+				for (var y = 0; y < this.side; y++)
+					for (var x = 0; x < this.side; x++)
+						if (this.cellGet(x, y).value === 0) this.cellSet(x, y, Math.random() < 0.0125 ? 3 : 0);
+			}
+			
+			this.spawnFood = function() {
+				for (var y = 0; y < this.side; y++)
+					for (var x = 0; x < this.side; x++)
+						if (this.cellGet(x, y).value === 0) this.cellSet(x, y, Math.random() < 0.0125 ? 2 : 0);
+			}
+			
+			this.generateFood = function() {
+				if (Math.random() < 0.05) {
+					var x = Math.floor(Math.random() * this.side);
+					var y = Math.floor(Math.random() * this.side);
+					if (this.cellGet(x, y).value === 0) this.cellSet(x, y, 2);
+				}
+			}
+		
+			this.cellSet = function(x, y, value) {
+				this.cells[this.side * y + x].value = value;
+				this.drawList.push(this.cells[this.side * y + x]);
+			}
+			
+			this.cellGet = function(x, y) {
+				return this.cells[this.side * y + x];
+			}
+		
+			this.spawnSnake = function() {
+				this.snake = new Snake();
+				var x = Math.floor(Math.random() * this.side);
+				var y = Math.floor(Math.random() * this.side);
+				this.cellSet(x, y, 1);
+				this.snake.cells.push(this.cellGet(x, y));
+				this.snake.len++;
+			}
+					
+			this.draw = function() {
+				ctx.strokeStyle = '#0D1E31';
+				while (this.drawList.length)
+				{
+					var cell = this.drawList.pop();
+					if (cell.value == 1) ctx.fillStyle = '#F17F1E';
+					else if (cell.value == 2) ctx.fillStyle = '#75E652';
+					else if (cell.value == 3) ctx.fillStyle = '#967E92';
+					else ctx.fillStyle = "#38374B";
+					ctx.fillRect(cell.x * this.cellSize, cell.y * this.cellSize, this.cellSize, this.cellSize);
+					ctx.strokeRect(cell.x * this.cellSize, cell.y * this.cellSize, this.cellSize, this.cellSize);
+				}
+			}
+		
+			this.moveSnake = function() {
+				grid.snake.changeDir();
+				var targetX = this.snake.cells[this.snake.len - 1].x + this.snake.dirx;
+				if (targetX >= this.side) targetX = 0;
+				if (targetX < 0) targetX = this.side - 1;
+				var targetY = this.snake.cells[this.snake.len - 1].y + this.snake.diry;
+				if (targetY >= this.side) targetY = 0;
+				if (targetY < 0) targetY = this.side - 1;
+			
+				if (this.cellGet(targetX, targetY).value === 1 || this.cellGet(targetX, targetY).value === 3) {
+					this.init();
+					return;
+				}
+			
+				if (this.snake.toGrow) {
+					this.snake.toGrow--;
+					this.cellSet(targetX, targetY, 1);
+					this.snake.len++;
+					this.snake.cells.push(this.cellGet(targetX, targetY));
+					return;
+				}
+				if (this.cellGet(targetX, targetY).value === 2) {
+					this.snake.toGrow += Math.floor(Math.random() * 8) + 1;
+					this.cellSet(targetX, targetY, 1);
+					this.snake.len++;
+					this.snake.cells.push(this.cellGet(targetX, targetY));
+				}
+				else {
+					this.cellSet(this.snake.cells[0].x, this.snake.cells[0].y, 0);
+					this.snake.shift();
+					this.cellSet(targetX, targetY, 1);
+					this.snake.cells[this.snake.len - 1] = this.cellGet(targetX, targetY);
+				}
+			}
+		}
+
+		function Timer(time) {
+			this.initialTime = time;
+			this.currentTime = time;
+			
+			this.tick = function() {
+				if (--this.currentTime === 0) {
+					this.currentTime = this.initialTime;
+					return true;
+				}
+				return false;
+			}
+		}
+		
+		var gameSpeed = new Timer(16);
+		
+		var grid = new Grid(32);
+		console.assert(!(canvas.width % grid.side));
+		
+		grid.init();
+
+		function loop() {
+			if (gameSpeed.tick()) {
+				grid.generateFood();
+				grid.moveSnake();
+				grid.draw();
+			}
+			requestAnimationFrame(loop);
+		}
+
+		 document.getElementById('up').onclick = function(){commander.add(0, -1)};
+		 document.getElementById('down').onclick = function(){commander.add(0, 1)};
+		 document.getElementById('left').onclick = function(){commander.add(-1, 0)};
+		 document.getElementById('right').onclick = function(){commander.add(1, 0)};
+		var main = function(event) { loop(); }
+		document.addEventListener("DOMContentLoaded", main);
+		document.addEventListener("keydown", (event) => {
+			if (event.key === 'ArrowUp') commander.add(0, -1);
+			if (event.key === 'ArrowDown') commander.add(0, 1);
+			if (event.key === 'ArrowLeft') commander.add(-1, 0);
+			if (event.key === 'ArrowRight') commander.add(1, 0);
+		});
+</script></body></html>
