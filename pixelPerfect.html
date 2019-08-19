@@ -1,0 +1,71 @@
+<meta charset=utf-8>
+<style>
+body
+{
+	margin: 0;
+}
+canvas
+{
+	image-rendering: pixelated;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+</style>
+<canvas id='canvas' width=640 height=360></canvas>
+<script>
+"use strict";
+var canvas = document.getElementById('canvas');
+var mousemove = function(event)
+{
+    mouseX = event.offsetX / coeff;
+    if (mouseX > width) mouseX = width;
+    if (mouseX < 0) mouseX = 0;
+    mouseY = event.offsetY / coeff;
+    if (mouseY > height) mouseY = height;
+    if (mouseY < 0) mouseY = 0;
+}
+canvas.onmousemove = mousemove;
+var ctx = canvas.getContext('2d');
+var image = new Image();
+image.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAu0lEQVRo3u3UMQrCMBSH8X8lp3B1yQGKUGjnrt7C0Xt00km8RdeM0iEgHqBLV+/gFAehg81uQr9vemR6P3ikONe1Yl3fXfR9fFRKKSPpNAw/r5emie5q916JtVHmAQCwdoCZ/5xlCf45y4oQAicEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADWADB5rXvblvN8fD3zA0jaHVpJU++sd5zQP5p69x3GqvX2/gG/1B2pUbJVBQAAAABJRU5ErkJggg==";
+var width, height, coeff, mouseX, mouseY;
+
+function resize()
+{
+	let hcoeff = Math.floor(window.innerWidth / 640);
+	if (hcoeff < 1) hcoeff = 1;
+	let vcoeff = Math.floor(window.innerHeight / 360);
+	if (vcoeff < 1) vcoeff = 1;
+	coeff = Math.min(hcoeff, vcoeff);
+	canvas.width = coeff * 640;
+	canvas.height = coeff * 360;
+	ctx.scale(coeff, coeff);
+	width = canvas.width / coeff;
+	height = canvas.height / coeff;
+}
+
+function loop()
+{
+    ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = '#00ff00';
+    if (window.innerWidth < 640 || window.innerHeight < 360) ctx.fillStyle = '#ff0000';
+    ctx.fillRect(0, 0, width, height);
+    for (let y = 0; y < height - 80; y += 80)
+        for (let x = 0; x < width; x += 80)
+            ctx.drawImage(image, x + 8, y + 8);
+    ctx.fillStyle = '#ff00ff';
+    ctx.fillRect(0, height - 40, width, 8);
+    ctx.fillStyle = '#0000ff';
+    ctx.fillRect(0, height - 32, width, 32);
+    let xx = Math.floor(mouseX / 80);
+    let yy = Math.floor(mouseY / 80);
+    ctx.fillStyle = '#ff000042';
+    ctx.fillRect(xx * 80, yy * 80, 80, 80);
+    requestAnimationFrame(loop);
+}
+var main = function() { resize(); loop(); }
+document.addEventListener('DOMContentLoaded', main);
+window.addEventListener('resize', resize);
+</script>
