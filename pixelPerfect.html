@@ -32,23 +32,21 @@ var image = new Image();
 image.src = "data:image/png;base64,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";
 var width, height, coeff, mouseX, mouseY;
 
-var idx = [];
 
-function init()
+function Card()
 {
-	let ix = 0;
-	let iy = 0;
-    for (let y = 0; y < height - 80; y += 80)
+	this.color = '';
+	this.quant = 0;
+	this.shape = '';
+	this.fill = '';
+	this.imageX = -1;
+	this.imageY = -1;
+	this.fieldX = -1;
+	this.fieldY = -1;
+	this.draw = function()
 	{
-        for (let x = 0; x < width; x += 80)
-		{
-			idx.push({ix, iy});
-			ix++;
-		}
-		ix = 0;
-		iy++;
+		ctx.drawImage(image, this.imageX * 64, this.imageY * 64, 64, 64, this.fieldX + 8, this.fieldY + 8, 64, 64);
 	}
-	shuffle(idx);
 }
 
 function resize()
@@ -77,24 +75,17 @@ function shuffle(a)
     return a;
 }
 
+var fieldCards = [];
+
 function loop()
 {
     ctx.imageSmoothingEnabled = false;
     ctx.fillStyle = '#ffffff';
     if (window.innerWidth < 640 || window.innerHeight < 360) ctx.fillStyle = '#ff0000';
     ctx.fillRect(0, 0, width, height);
-	let ii = 0;
-	let ix, iy;
-    for (let y = 0; y < height - 80; y += 80)
-	{
-        for (let x = 0; x < width; x += 80)
-		{
-			ix = idx[ii].ix;
-			iy = idx[ii].iy;
-            ctx.drawImage(image, ix * 64, iy * 64, 64, 64, x + 8, y + 8, 64, 64);
-			ii++;
-		}
-	}
+	fieldCards.forEach(function (arrayItem) {
+		arrayItem.draw();
+	});
     ctx.fillStyle = '#dddddd';
     ctx.fillRect(0, height - 40, width, 8);
     ctx.fillStyle = '#cccccc';
@@ -103,9 +94,122 @@ function loop()
     let yy = Math.floor(mouseY / 80);
     ctx.fillStyle = '#dddddd77';
     ctx.fillRect(xx * 80, yy * 80, 80, 80);
+    ctx.fillStyle = '#bbbbbb55';
+	set.forEach(function(c){
+    ctx.fillRect(c.fieldX, c.fieldY, 80, 80);
+	});
     requestAnimationFrame(loop);
 }
-var main = function() { resize(); init(); loop(); }
+
+var allCards = [];
+
+function prepareCards()
+{
+	allCards = [];
+	for (let y = 0; y < 8; y++)
+	{
+		for (let x = 0; x < 8; x++)
+		{
+			let card = new Card();
+			card.imageX = x;
+			card.imageY = y;
+			if (x == 0 || x == 1 | x == 2) card.color = 'b';
+			if (x == 3 || x == 4 | x == 5) card.color = 'g';
+			if (x == 6 || x == 7 | x == 8) card.color = 'r';
+			if (y == 0 || y == 1 | y == 2) card.shape = 'c';
+			if (y == 3 || y == 4 | y == 5) card.shape = 'h';
+			if (y == 6 || y == 7 | y == 8) card.shape = 'v';
+			if (y == 0 || y == 3 | y == 6) card.quant = 3;
+			if (y == 1 || y == 4 | y == 7) card.quant = 2;
+			if (y == 2 || y == 5 | y == 8) card.quant = 1;
+			if (x == 0 || x == 3 | x == 6) card.fill = 'e';
+			if (x == 1 || x == 4 | x == 7) card.fill = 's';
+			if (x == 2 || x == 5 | x == 8) card.fill = 'f';
+			allCards.push(card);
+		}
+	}
+	shuffle(allCards);
+}
+
+function newGame()
+{
+	set = [];
+	fieldCards = [];
+	prepareCards();
+	let ii = 0;
+    for (let y = 0; y < height - 80; y += 80)
+	{
+        for (let x = 0; x < width; x += 80)
+		{
+			let card = allCards[ii];
+			card.fieldX = x;
+			card.fieldY = y;
+			fieldCards.push(card);
+			ii++;
+		}
+	}
+}
+
+var set = [];
+
+function dumpCard()
+{
+	let x = Math.floor(mouseX / 80) * 80;
+	let y = Math.floor(mouseY / 80) * 80;
+	fieldCards.forEach(function (arrayItem) {
+		if (arrayItem.fieldX == x && arrayItem.fieldY == y)
+		{
+			//console.log('color: ' + arrayItem.color + ', quant: ' + arrayItem.quant + ', fill: ' + arrayItem.fill + ', shape: ' + arrayItem.shape);
+			if (set.length == 3)
+			{
+				set = [];
+			}
+			set.push(arrayItem);
+			if (set.length == 3)
+			{
+				let colorTest = set[0].color === set[1].color && set[1].color === set[2].color;
+				if (!colorTest) colorTest = set[0].color !== set[1].color && set[1].color !== set[2].color && set[0].color !== set[2].color;
+				if (!colorTest)
+				{
+					set = [];
+					return;
+				}
+				let quantTest = set[0].quant === set[1].quant && set[1].quant === set[2].quant;
+				if (!quantTest) quantTest = set[0].quant !== set[1].quant && set[1].quant !== set[2].quant && set[0].quant !== set[2].quant;
+				if (!quantTest)
+				{
+					set = [];
+					return;
+				}
+
+				let shapeTest = set[0].shape === set[1].shape && set[1].shape === set[2].shape;
+				if (!shapeTest) shapeTest = set[0].shape !== set[1].shape && set[1].shape !== set[2].shape && set[0].shape !== set[2].shape;
+				if (!shapeTest)
+				{
+					set = [];
+					return;
+				}
+
+				let fillTest = set[0].fill === set[1].fill && set[1].fill === set[2].fill;
+				if (!fillTest) fillTest = set[0].fill !== set[1].fill && set[1].fill !== set[2].fill && set[0].fill !== set[2].fill;
+				if (!fillTest)
+				{
+					set = [];
+					return;
+				}
+
+				console.log('SET!');
+				set = [];
+			}
+		}
+	});
+}
+
+var main = function() { resize(); newGame(); loop(); }
 document.addEventListener('DOMContentLoaded', main);
+document.getElementById('canvas').onclick = dumpCard; 
+document.addEventListener('keydown', (event) => {
+							  if (event.key === 'n') newGame();
+							  });
 window.addEventListener('resize', resize);
 </script>
