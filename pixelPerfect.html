@@ -61,6 +61,7 @@ function Card()
 	this.imageY = -1;
 	this.fieldX = -1;
 	this.fieldY = -1;
+	this.mark = false;
 	this.draw = function()
 	{
 		ctx.drawImage(image, this.imageX * 64, this.imageY * 64, 64, 64, this.fieldX + 8, this.fieldY + 8, 64, 64);
@@ -206,12 +207,43 @@ function checkSet()
 					set = [];
 					return;
 				}
-
+				renewField();
 				console.log('SET!');
 				set = [];
 			}
 		}
 	});
+}
+
+function renewField()
+{
+	for (let setIndex = set.length - 1; setIndex >= 0; setIndex--)
+	{
+		for (let fieldIndex = fieldCards.length - 1; fieldIndex >= 0; fieldIndex--)
+		{
+			if (fieldCards[fieldIndex].id === set[setIndex].id)
+			{
+				if (allCards.length)
+				{
+					let card = allCards[0];
+					card.fieldX = fieldCards[fieldIndex].fieldX;
+					card.fieldY = fieldCards[fieldIndex].fieldY;
+					fieldCards[fieldIndex] = card;
+					allCards.splice(0, 1);
+					set.splice[setIndex, 1];
+				}
+				else
+				{
+					fieldCards.splice(fieldIndex, 1);
+					set.splice[setIndex, 1];
+				}
+				if (!fieldCards.length)
+				{
+					console.log("done");
+				}
+			}
+		}
+	}
 }
 
 function shuffle(array)
