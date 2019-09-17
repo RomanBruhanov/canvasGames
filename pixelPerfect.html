@@ -258,11 +258,71 @@ function shuffle(array)
 	return array;
 }
 
+function checkForSets()
+{
+	if (fieldCards.length < 3)
+	{
+		console.log('no sets');
+		return;
+	}
+	for (let firstCard = 0; firstCard < fieldCards.length - 1; firstCard++)
+	{
+		for (let secondCard = firstCard + 1; secondCard < fieldCards.length; secondCard++)
+		{
+			for (let thirdCard = 0; thirdCard < fieldCards.length; thirdCard++)
+			{
+				if (thirdCard === firstCard || thirdCard === secondCard)
+				{
+					continue;
+				}
+				let tempSet = [];
+
+				tempSet.push(fieldCards[firstCard]);
+				tempSet.push(fieldCards[secondCard]);
+				tempSet.push(fieldCards[thirdCard]);
+
+				let colorTest = tempSet[0].color === tempSet[1].color && tempSet[1].color === tempSet[2].color;
+				if (!colorTest) colorTest = tempSet[0].color !== tempSet[1].color && tempSet[1].color !== tempSet[2].color && tempSet[0].color !== tempSet[2].color;
+				if (!colorTest)
+				{
+					continue;
+				}
+				let quantTest = tempSet[0].quant === tempSet[1].quant && tempSet[1].quant === tempSet[2].quant;
+				if (!quantTest) quantTest = tempSet[0].quant !== tempSet[1].quant && tempSet[1].quant !== tempSet[2].quant && tempSet[0].quant !== tempSet[2].quant;
+				if (!quantTest)
+				{
+					continue;
+				}
+
+				let shapeTest = tempSet[0].shape === tempSet[1].shape && tempSet[1].shape === tempSet[2].shape;
+				if (!shapeTest) shapeTest = tempSet[0].shape !== tempSet[1].shape && tempSet[1].shape !== tempSet[2].shape && tempSet[0].shape !== tempSet[2].shape;
+				if (!shapeTest)
+				{
+					continue;
+				}
+
+				let fillTest = tempSet[0].fill === tempSet[1].fill && tempSet[1].fill === tempSet[2].fill;
+				if (!fillTest) fillTest = tempSet[0].fill !== tempSet[1].fill && tempSet[1].fill !== tempSet[2].fill && tempSet[0].fill !== tempSet[2].fill;
+				if (!fillTest)
+				{
+					continue;
+				}
+				console.log('there is at least one set');
+				return;
+			}
+		}
+	}
+	console.log('no sets');
+}
+
 var main = function() { resize(); newGame(); loop(); }
 document.addEventListener('DOMContentLoaded', main);
 document.addEventListener('keydown', (event) => {
 							  if (event.key === 'n') newGame();
 							  });
+document.addEventListener('keydown', (event) => {
+							if (event.key === 'c') checkForSets();
+						  		});
 window.addEventListener('resize', resize);
 
 var image = new Image();
