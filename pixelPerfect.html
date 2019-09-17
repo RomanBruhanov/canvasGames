@@ -1,10 +1,4 @@
 <meta charset=utf-8>
-<meta name="viewport" content="initial-scale=1.0">
-<meta name = "viewport" content = "user-scalable=no">
-<meta name="viewport" content="width=device-width*2">
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Set">
 <style>
 
 body
@@ -66,7 +60,6 @@ function Card()
 	this.imageY = -1;
 	this.fieldX = -1;
 	this.fieldY = -1;
-	this.mark = false;
 	this.draw = function()
 	{
 		ctx.drawImage(image, this.imageX * 64, this.imageY * 64, 64, 64, this.fieldX + 8, this.fieldY + 8, 64, 64);
@@ -100,10 +93,6 @@ function loop()
     ctx.fillRect(0, height - 40, width, 8);
     ctx.fillStyle = '#cccccc';
     ctx.fillRect(0, height - 32, width, 32);
-    let xx = Math.floor(mouseX / 80);
-    let yy = Math.floor(mouseY / 80);
-    ctx.fillStyle = '#dddddd77';
-    //ctx.fillRect(xx * 80, yy * 80, 80, 80);
     ctx.fillStyle = '#bbbbbb55';
 	set.forEach(function(arrayItem){
 					ctx.fillRect(arrayItem.fieldX, arrayItem.fieldY, 80, 80);
@@ -114,9 +103,9 @@ function loop()
 function prepareCards()
 {
 	let cid = 0;
-	for (let y = 0; y < 8; y++)
+	for (let y = 0; y < 9; y++)
 	{
-		for (let x = 0; x < 8; x++)
+		for (let x = 0; x < 9; x++)
 		{
 			let card = new Card();
 			card.id = cid;
