@@ -149,6 +149,38 @@ function newGame()
 	}
 }
 
+function isSet(array)
+{
+	let colorTest = array[0].color === array[1].color && array[1].color === array[2].color;
+	if (!colorTest) colorTest = array[0].color !== array[1].color && array[1].color !== array[2].color && array[0].color !== array[2].color;
+	if (!colorTest)
+	{
+		return false;
+	}
+	let quantTest = array[0].quant === array[1].quant && array[1].quant === array[2].quant;
+	if (!quantTest) quantTest = array[0].quant !== array[1].quant && array[1].quant !== array[2].quant && array[0].quant !== array[2].quant;
+	if (!quantTest)
+	{
+		return false;
+	}
+
+	let shapeTest = array[0].shape === array[1].shape && array[1].shape === array[2].shape;
+	if (!shapeTest) shapeTest = array[0].shape !== array[1].shape && array[1].shape !== array[2].shape && array[0].shape !== array[2].shape;
+	if (!shapeTest)
+	{
+		return false;
+	}
+
+	let fillTest = array[0].fill === array[1].fill && array[1].fill === array[2].fill;
+	if (!fillTest) fillTest = array[0].fill !== array[1].fill && array[1].fill !== array[2].fill && array[0].fill !== array[2].fill;
+	if (!fillTest)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 function checkSet()
 {
 	let x = Math.floor(mouseX / 80) * 80;
@@ -171,35 +203,11 @@ function checkSet()
 			}
 			if (set.length == 3)
 			{
-				let colorTest = set[0].color === set[1].color && set[1].color === set[2].color;
-				if (!colorTest) colorTest = set[0].color !== set[1].color && set[1].color !== set[2].color && set[0].color !== set[2].color;
-				if (!colorTest)
+				let result = isSet(set);
+				if (!result)
 				{
-					set = [];
-					return;
-				}
-				let quantTest = set[0].quant === set[1].quant && set[1].quant === set[2].quant;
-				if (!quantTest) quantTest = set[0].quant !== set[1].quant && set[1].quant !== set[2].quant && set[0].quant !== set[2].quant;
-				if (!quantTest)
-				{
-					set = [];
-					return;
-				}
-
-				let shapeTest = set[0].shape === set[1].shape && set[1].shape === set[2].shape;
-				if (!shapeTest) shapeTest = set[0].shape !== set[1].shape && set[1].shape !== set[2].shape && set[0].shape !== set[2].shape;
-				if (!shapeTest)
-				{
-					set = [];
-					return;
-				}
-
-				let fillTest = set[0].fill === set[1].fill && set[1].fill === set[2].fill;
-				if (!fillTest) fillTest = set[0].fill !== set[1].fill && set[1].fill !== set[2].fill && set[0].fill !== set[2].fill;
-				if (!fillTest)
-				{
-					set = [];
-					return;
+					   set = [];
+					   return;
 				}
 				renewField();
 				console.log('SET!');
@@ -275,29 +283,8 @@ function checkForSets()
 				tempSet.push(fieldCards[secondCard]);
 				tempSet.push(fieldCards[thirdCard]);
 
-				let colorTest = tempSet[0].color === tempSet[1].color && tempSet[1].color === tempSet[2].color;
-				if (!colorTest) colorTest = tempSet[0].color !== tempSet[1].color && tempSet[1].color !== tempSet[2].color && tempSet[0].color !== tempSet[2].color;
-				if (!colorTest)
-				{
-					continue;
-				}
-				let quantTest = tempSet[0].quant === tempSet[1].quant && tempSet[1].quant === tempSet[2].quant;
-				if (!quantTest) quantTest = tempSet[0].quant !== tempSet[1].quant && tempSet[1].quant !== tempSet[2].quant && tempSet[0].quant !== tempSet[2].quant;
-				if (!quantTest)
-				{
-					continue;
-				}
-
-				let shapeTest = tempSet[0].shape === tempSet[1].shape && tempSet[1].shape === tempSet[2].shape;
-				if (!shapeTest) shapeTest = tempSet[0].shape !== tempSet[1].shape && tempSet[1].shape !== tempSet[2].shape && tempSet[0].shape !== tempSet[2].shape;
-				if (!shapeTest)
-				{
-					continue;
-				}
-
-				let fillTest = tempSet[0].fill === tempSet[1].fill && tempSet[1].fill === tempSet[2].fill;
-				if (!fillTest) fillTest = tempSet[0].fill !== tempSet[1].fill && tempSet[1].fill !== tempSet[2].fill && tempSet[0].fill !== tempSet[2].fill;
-				if (!fillTest)
+				let result = isSet(tempSet);
+				if (!result)
 				{
 					continue;
 				}
